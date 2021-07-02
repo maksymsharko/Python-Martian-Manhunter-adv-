@@ -4,7 +4,7 @@ body {
 }
 
 h1 {
-    color: black;
+    color: green;
 }
 
 .form-container {
@@ -21,8 +21,6 @@ form {
 form label {
     display: block;
     margin-bottom: 10px;
-    color: red;
-    font-size: 25px;
 }
 
 form select {
@@ -37,9 +35,9 @@ form select {
 form button {
     margin-top: 10px;
     width: 100%;
-    background-color: grey;
+    background-color: green;
     color: white;
-    border-color: black;
+    border-color: white;
     padding: 20px;
 }
 
@@ -59,7 +57,7 @@ form button {
 }
 
 .temp {
-    color: green;
+    color: #73b304;
 }
 
 .rain {
