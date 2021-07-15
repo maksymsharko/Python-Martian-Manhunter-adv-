@@ -1,5 +1,7 @@
+import datetime
+import os
 from app import app, api, db
-from flask import render_template, request, Response
+from flask import render_template, request, Response, redirect
 from config import Config, articles
 from flask_restful import Resource, Api
 from models.models import Article, User
@@ -17,109 +19,49 @@ def article_details(slug):
     return render_template('blog/details.html', article=article)
 
 
-class MenuItem(Resource):
-    def get(self):
-        return {
-            'success': True,
-            'items': Config.MENU_ITEMS
-        }
+@app.route('/article/create')
+def article_create():
+    return render_template('blog/article_create.html')
 
 
-class Articles(Resource):
-    def post(self):
-        data = request.json
-        article = Article(
-            title=data.get('title'),
-            slug=data.get('slug'),
-            author_id=data.get('author_id'),
-            description=data.get('description'),
-            short_description=data.get('short_description'),
-            img=data.get('img')
-        )
-        db.session.add(article)
-        db.session.commit()
-        return article.serialize
+@app.route('/article/store', methods=["POST"])
+def article_store():
+    data = request.form
+    img = request.files['img']
+    if img:
+        img.save(os.path.join(Config.UPLOAD_PATH, img.filename))
+        path = "/" + Config.UPLOAD_PATH + img.filename
 
-    def get(self):
-        articles = Article.query
-        if request.args.get('title'):
-            articles = articles.filter_by(title=request.args.get('title'))
-
-        # articles = articles.filter(Article.title.startswith('A'))
-
-        if request.args.get("sort_by"):
-            articles = articles.order_by(request.args.get("sort_by"))
-
-        articles = articles.all()
-        serialized_articles = []
-        for article in articles:
-            serialized_articles.append(article.serialize)
-
-        return serialized_articles
+    article = Article(
+        title=data.get('title'),
+        slug=data.get('slug'),
+        author_id=1,
+        description=data.get('description'),
+        short_description=data.get('short_description'),
+        img=path
+    )
+    
+    db.session.add(article)
+    db.session.commit()
+    return redirect("/")
 
 
-class ArticlesEntity(Resource):
-    def get(self, id):
-        article = Article.query.get(id)
-        if article == None:
-            return Response(status=404)
-        return article.serialize
+@app.route('/user/registration')
+def user_registration():
+    return render_template('blog/user_registration.html')
 
 
-class Users(Resource):
-    def get(self):
-        user = User.query.get(1)
-        serialized_articles = []
-        for article in user.articles:
-            print(article)
-            serialized_articles.append(article.serialize)
-        return serialized_articles
+@app.route('/user/user_created', methods=["POST"])
+def user_create():
+    data = request.form
+    user = User(
+        username=data.get('username'),
+        email=data.get('email'),
+        bio=data.get('bio'),
+        created=datetime.date.today().strftime('%Y-%m-%d-%H:%M:%S'),
+        admin=False
+    )
+    db.session.add(user)
+    db.session.commit()
+    return redirect("/")
 
-
-class Usersread(Resource):
-    def get(self, id):
-        user_read = User.query.get(id)
-        if user_read == None:
-            return Response(status=404)
-        serialized_articles = []
-        for article in user_read.articles:
-            print(article)
-            serialized_articles.append(article.serialize)
-        serialized_user_read = [user_read.serialize, serialized_articles]
-        return serialized_user_read
-
-
-class Usersupdate(Resource):
-    def post(self, id):
-        user = User.query.get(id)
-        data = request.json
-        user.bio = data.get('bio')
-        user.articles = data.get('articles')
-        User.query.set(id)
-        db.session.add(user)
-        db.session.commit()
-        return user.serialize
-
-
-class Userscreate(Resource):
-    def post(self):
-        data = request.json
-        user = User(
-            username=data.get('username'),
-            email=data.get('email'),
-            created=data.get('created'),
-            bio=data.get('bio'),
-            admin=data.get('admin')
-        )
-        db.session.add(user)
-        db.session.commit()
-        return user.serialize
-
-
-api.add_resource(MenuItem, '/menu-items')
-api.add_resource(Articles, '/articles')
-api.add_resource(Users, '/users')
-api.add_resource(ArticlesEntity, '/articles/<int:id>')
-api.add_resource(Usersread, '/users/<int:id>')
-api.add_resource(Usersupdate, '/users/update/<int:id>')
-api.add_resource(Userscreate, '/users/create_user')

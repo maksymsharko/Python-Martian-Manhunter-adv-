@@ -1,8 +1,9 @@
 """Data models."""
 from app import db
+from helpers.serializers import Serializer
 
 
-class User(db.Model):
+class User(db.Model, Serializer):
     """Data model for user accounts."""
     __tablename__ = 'users'
     id = db.Column(
@@ -12,13 +13,13 @@ class User(db.Model):
     username = db.Column(
         db.String(64),
         index=False,
-        unique=False,
+        unique=True,
         nullable=False
     )
     email = db.Column(
         db.String(80),
         index=True,
-        unique=False,
+        unique=True,
         nullable=False
     )
     created = db.Column(
@@ -41,20 +42,26 @@ class User(db.Model):
     )
     articles = db.relationship("Article", backref='author', lazy=True)
 
-    @property
-    def serialize(self):
-        return{
-            "id": self.id,
-            "username": self.username,
-            "email": self.email,
-            #"created": self.created,
-            "bio": self.bio,
-            "admin": self.admin,
-            "articles": self.articles
-        }
+#    @property
+#    def serialize(self):
+#        return{
+#            "id": self.id,
+#            "username": self.username,
+#            "email": self.email,
+#            "created": self.created,
+#            "bio": self.bio,
+#            "admin": self.admin,
+#            "articles": self.articles
+#        }
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+
+article_categories = db.Table('article_categories',
+                        db.Column("article_id", db.Integer, db.ForeignKey('articles.id')),
+                        db.Column("category_id", db.Integer, db.ForeignKey("category.id"))
+                    )
 
 
 class Article(db.Model):
@@ -64,6 +71,7 @@ class Article(db.Model):
         primary_key=True
     )
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+#    author = db.relationship("User", backref='articles', lazy=True)
     title = db.Column(
         db.String(255),
         nullable=False,
@@ -94,6 +102,7 @@ class Article(db.Model):
         index=False,
         unique=False
     )
+    categories = db.relationship("Category", secondary=article_categories, back_populates="articles")
 
     @property
     def serialize(self):
@@ -116,3 +125,5 @@ class Category(db.Model):
     title = db.Column(
         db.String(350)
     )
+
+    articles = db.relationship("Article", secondary=article_categories, back_populates="categories")

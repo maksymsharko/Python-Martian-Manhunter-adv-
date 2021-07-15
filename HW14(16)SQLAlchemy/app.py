@@ -15,6 +15,7 @@ db.init_app(app)
 
 with app.app_context():
     import routes.blog
+    import routes.api.blog
     from models.models import User, Article, Category
 
     db.create_all()
