@@ -1,0 +1,6 @@
+В проекті, який ви пишете вдома потрібно реалізувати:
+
+
+1. Add ListView and DetailsView views for all main models (Car, Order, Dealer);
+2. Add JSON serialized views for all objects for Car model, add /api/car/ json response view;
+4. Add index page with template - this page should contain list of cars and  links to car details page.
