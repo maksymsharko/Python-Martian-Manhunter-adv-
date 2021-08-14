@@ -50,5 +50,9 @@ urlpatterns = [
     path(
         'api/order/',
         include('src.apps.orders.urls')
-    )
+    ),
+    path(
+        'newsletter/',
+        include('src.apps.newsletter.urls', namespace='newsletters')
+    ),
 ]

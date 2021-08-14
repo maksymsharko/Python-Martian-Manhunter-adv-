@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'src.apps.dealers',
     'src.apps.orders',
     'phonenumber_field',
+    'src.apps.newsletter',
+
 ]
 
 MIDDLEWARE = [

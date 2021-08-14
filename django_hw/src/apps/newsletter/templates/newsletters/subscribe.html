@@ -1,0 +1,7 @@
+<h1>Ви можете заповнити форму нижче і бути підписаним на наші оновлення:</h1>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ forn.as_p }}
+    <input type="submit" value="Subscribe">
+</form>
+<p><a href="/">Повернутися на головну сторінку&#129305;</a></p>
