@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>&#128665;Список авто&#128665;</title>
+</head>
+<body>
+<h1>&#128204;Ви знаходитесь на головній сторінці сайту!</h1>
+<p><strong>Щоб дізнатись подробиці, будь ласка, перейдіть по нижченаведенних посиланнях&dArr;&#128071;:</strong></p>
+<dl>
+    <li><a href="{% url 'cars:car_list' %}">Cars</a></li>
+    <li><a href="{% url 'dealers:dealer_list' %}">Dealers</a></li>
+    <li><a href="{% url 'orders:order_list' %}">Orders</a></li>
+    <li><a href="{% url 'newsletters:new_newsletter' %}">Subscribe to news</a></li>
+</dl>
+</body>
+</html>
