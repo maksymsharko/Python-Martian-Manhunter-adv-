@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <style>
+        table {
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        #t01 tr:nth-child(even) {
+            background-color: #eeeeee;
+        }
+        #t01 tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        #t01 th {
+            background-color: black;
+            color: white;
+        }
+    </style>
+    <title>Cars List</title>
+</head>
+<body>
+
+<h1>Cars</h1>
+<table id="t01">
+    <thead>
+    <tr>
+        <th>Dealer</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Price</th>
+        <th>More information</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for car in cars %}
+        <tr>
+            <td>{{ car.dealer.title }}</td>
+            <td>{{ car.model.brand.name }}</td>
+            <td>{{ car.model.name }}</td>
+            <td>{{ car.price }}</td>
+            <td><a href="{% url 'cars:car_detail' car.slug %}">More info...</a></td>
+        </tr>
+    {% empty %}
+        <tr>No cars have been added yet.</tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+</body>
+</html>
