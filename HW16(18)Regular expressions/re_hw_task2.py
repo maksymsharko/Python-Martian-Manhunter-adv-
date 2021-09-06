@@ -10,7 +10,7 @@ res = re.finditer(r"<p>(?P<institution>.*).*\n?<b>(?P<email>.*)<", site.text)
 res_1 = list((re.sub(r'\t', '', match.group('institution')), match.group('email')) for match in res)
 print(res_1)
 dict_group = {}
-res_2 = re.finditer(r">\s\d+\.\s((?P<title>[а-яА-Яa-z-єіїЄІЇ,\s]+)\<\/span><\/h2>\s?)((<p>)?[а-яА-Яa-z-A-Z-єіїЄІЇ",.\s]+<b>[a-zA-Z0-9_@.]+<\/b>\s?\n?(<\/p><p>)?)*", site.text)
+res_2 = re.finditer(r'>\s\d+\.\s((?P<title>[а-яА-Яa-z-єіїЄІЇ,\s]+)\<\/span><\/h2>\s?)((<p>)?[а-яА-Яa-z-A-Z-єіїЄІЇ",.\s]+<b>[a-zA-Z0-9_@.]+<\/b>\s?\n?(<\/p><p>)?)*', site.text)
 for i in res_2:
     result = re.finditer(r'<p>(?P<institution>.*).*\n?<b>(?P<email>.*)<', i.group(0))
     dict_group.update({i.group("title"): list((re.sub(r"\t", "", match.group("institution")), match.group("email")) for
