@@ -10,28 +10,26 @@
 </head>
 <body>
     <div class="container">
-        {% for city in weather %}
-        <h1>Weather for {{ city["name"] }}</h1>
+        <h1>Weather for {{ weather["name"] }}</h1>
         <div class="coords">
             <h3>Coords</h3>
             <div class="coords-value">
-                <p>Lat: {{ city["coord"]["lat"] }}</p>
-                <p>Lon: {{ city["coord"]["lon"] }}</p>
+                <p>Lat: {{ weather["coord"]["lat"] }}</p>
+                <p>Lon: {{ weather["coord"]["lon"] }}</p>
             </div>
         </div>
         <div class="temp">
             <h3>Temp</h3>
             <div class="temp-value">
-                <p>{{ city["main"]["temp"] }}</p>
+                <p>{{ weather['main']['temp'] }}</p>
             </div>
         </div>
-        {% if city.get("rain") != None %}
+        {% if weather.get("rain") != None %}
             <div class="rain">
                 <h3>Rain</h3>
             </div>
 
         {% endif %}
-        {% endfor %}
     </div>
 
 </body>
